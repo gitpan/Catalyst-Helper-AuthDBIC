@@ -23,3 +23,4 @@ Catalyst::Helper::AuthDBIC::add_plugins();
 Catalyst::Helper::AuthDBIC::add_config();
 Catalyst::Helper::AuthDBIC::write_templates();
 Catalyst::Helper::AuthDBIC::update_makefile();
+Catalyst::Helper::AuthDBIC::add_user_helper();

@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 use Carp;
 use UNIVERSAL::require;
 use DBI;
@@ -11,7 +11,9 @@ use Memoize;
 use PPI;
 use PPI::Find;
 use Catalyst::Utils;
-use PPI::Dumper;
+use File::Spec;
+use Config;
+
 memoize('app_name');
 
 =head1 NAME
@@ -29,7 +31,12 @@ recommended to back up your application before using this module.
 
 =head2 USAGE
 
-run the auth_bootstrap.pl in your application's root dir.
+Run the auth_bootstrap.pl in your application's root dir.
+
+The helper also creates a scriptin the script dir.  To add a user
+(with an optional role) do:
+
+ myapp_auth_admin.pl -user username -passwd password [-role role]
 
 =head2 sub app_name()
 
@@ -64,10 +71,10 @@ sub make_model {
     my $dbh = DBI->connect("dbi:SQLite:dbname=db/auth.db","","");
     my @sql = ("CREATE TABLE role (
                 id   INTEGER PRIMARY KEY,
-                role TEXT );",
+                role TEXT UNIQUE );",
                "CREATE TABLE user (
                 id       INTEGER PRIMARY KEY,
-                username TEXT,
+                username TEXT UNIQUE,
                 email    TEXT,
                 password TEXT,
                 status   TEXT,
@@ -80,21 +87,22 @@ sub make_model {
            );
 
     map { $dbh->do($_) } @sql;
-    my $app_name = Catalyst::Utils::appprefix(app_name());
-    make_schema_at("Auth::Schema",
+    my $app_prefix = Catalyst::Utils::appprefix(app_name());
+    
+    make_schema_at(app_name() . "::Auth::Schema",
                    {  components => ['DigestColumns'],
                       dump_directory => 'lib' ,
                   },
                    ["dbi:SQLite:dbname=db/auth.db", "",""]);
 
-    my @cmd = ( "./script/$app_name" . "_create.pl" ,
+    my @cmd = ( "./script/$app_prefix" . "_create.pl" ,
                  'model',
                  'Auth',
                  'DBIC::Schema',
-                 'Auth::Schema',
+                 app_name() . "::Auth::Schema",
                  'dbi:SQLite:db/auth.db,"",""');
     system( @cmd );
-    my $user_schema = 'Auth::Schema::User';
+    my $user_schema = app_name() . '::Auth::Schema::User';
     my @path = split /::/, $user_schema;
     my $user_schema_path = join '/', @path;
     my $module = "lib/$user_schema_path.pm";
@@ -202,7 +210,7 @@ sub _get_ppi {
     return ($module, $doc);
 }
 
-=head2 write_templates()
+=head2 sub write_templates()
 
 make the login, logout and unauth templates
 
@@ -219,7 +227,7 @@ sub write_templates {
     $helper->mk_file("root/auth/unauth.tt", $unauth);
 }
 
-=head2 update_makefile()
+=head2 sub update_makefile()
 
 Adds the auth and session dependencies to Makefile.PL
 
@@ -246,6 +254,28 @@ sub _find_install_script {
     return 0;
 }
 
+=head2 sub add_user_helper()
+
+A little script to add a user to the database.
+
+=cut
+
+sub add_user_helper {
+    my $helper = Catalyst::Helper->new;
+    my $app_prefix = Catalyst::Utils::appprefix(app_name());
+    my $script_dir = File::Spec->catdir( '.', 'script' );
+    my $script = "$script_dir\/$app_prefix\_auth_admin.pl";
+    my $startperl = "#!$Config{perlpath} -w";
+    $DB::single=1;
+    $helper->render_file('auth_admin',
+                         $script,
+                         { start_perl => $startperl,
+                           appprefix  => $app_prefix,
+                           startperl => $startperl,
+                           app_name => app_name(),
+                       });
+    chmod 0700, $script;
+}
 
 =head2 BUGS
 
@@ -414,3 +444,72 @@ ref="[% c.uri_for('/auth/logout') %]">logout</a> and try logging in again as a d
 ifferent user.  If you think this is an error, please contact <a href="mailto:[%
 c.config.admin %]">[% c.config.admin %]</a>
 
+__auth_admin__
+[% startperl %]
+
+use strict;
+use warnings;
+use Pod::Usage;
+use Getopt::Long;
+use FindBin qw/$Bin/;
+use lib "$Bin/../lib";
+
+use [% app_name %]::Auth::Schema;
+
+my $user = undef;
+my $passwd = undef;
+my $help = undef;
+my $role = undef;
+my $email = undef;
+my $schema = [% app_name %]::Auth::Schema->connect("dbi:SQLite:$Bin/../db/auth.db");
+
+GetOptions(
+    'user=s'    => \$user,
+    'pass|password|passwd=s' => \$passwd,
+    'role:s' => \$role,
+    'help' => \$help,
+    'email:s' => \$email,
+);
+
+pod2usage(1) if ( $help || !$user || !$passwd );
+
+add_user($schema, $user,$passwd,$role, $email);
+
+sub add_user {
+    my ($schema, $user, $passwd, $role, $email ) = @_;
+    my %user_insert = (
+        username => $user,
+        password => $passwd,
+        email   => $email,
+        role_text => $role,
+    );
+
+    my $role_rs = undef;
+    if ($role) {
+        $role_rs = $schema->resultset('Role')->find_or_create({role => $role});
+        $user_insert{role_text} = $role;
+    }
+    my $user_rs = $schema->resultset('User')->create(\%user_insert);
+    if ($role_rs) {
+        my $user_role_rs = $schema->resultset('UserRole')
+            ->create({ user => $user_rs,
+                       roleid => $role_rs});
+    }
+}
+
+=head1 NAME
+
+[% appprefix %]_auth_admin.pl - Sets the username and password for the generated authentication database
+
+=head1 SYNOPSIS
+
+[% appprefix %]_auth_admin.pl -user username -passwd password [-role role]
+
+ Options:
+   -user      username
+   -passwd    password
+   -role      role (optional)
+   -email     email address (optional)
+   -help      display this help and exit
+
+=cut

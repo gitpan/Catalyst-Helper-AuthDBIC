@@ -1,4 +1,3 @@
-.gitignore
 Changes
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
@@ -22,16 +21,10 @@ t/author/pod-coverage.t
 t/author/pod.t
 t/lib/db/auth.db,"",""
 t/lib/db/auth.db,,
-t/lib/lib/Auth/Schema.pm
-t/lib/lib/Auth/Schema/Role.pm
-t/lib/lib/Auth/Schema/User.pm
-t/lib/lib/Auth/Schema/UserRole.pm
-t/lib/lib/TestApp/Model/Auth.pm
 t/lib/Makefile.PL
 t/lib/script/testapp_create.pl
 t/lib/script/testapp_server.pl
 t/lib/script/testapp_test.pl
-t/lib/t/model_Auth.t
 t/lib/TestApp.pm
 t/lib/TestApp/Controller/Root.pm
 t/lib/TestApp/Model/.gitignore

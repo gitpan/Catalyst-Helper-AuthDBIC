@@ -24,4 +24,4 @@ requires:
   DBIx::Class::Schema::Loader: 0
   Digest::SHA1: 0
   PPI: 0
-version: 0.01
+version: 0.02

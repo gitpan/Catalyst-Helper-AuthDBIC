@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use parent qw/Catalyst/;
-use Catalyst qw/-Debug
+use Catalyst qw/
                 ConfigLoader
                 Static::Simple/;
 

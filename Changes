@@ -1,0 +1,7 @@
+0.02 Thu Aug 21
+     - Changed Auth::Schema to $appname::Auth::Schema
+     - Added user admin scripts to script/myapp_adduser.pl
+
+0.01 Wed Aug 20
+     - Initial very rough release
+
