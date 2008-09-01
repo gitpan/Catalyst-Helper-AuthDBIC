@@ -2,9 +2,8 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 use Carp;
-use UNIVERSAL::require;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
 use Memoize;
@@ -51,6 +50,10 @@ sub app_name {
     while (<$FH>) {
         next unless /^name '(.*?)';/;
         $app_name=$1;
+        $app_name =~ s/-/::/g; # only unsafe if you are already insane
+                              # because everything else in
+                              # Catalyst::Helper will also be broken
+                              # for you.
         croak "Makefile.PL appears to have no name for the application\n" unless $app_name;
         last;
     }
