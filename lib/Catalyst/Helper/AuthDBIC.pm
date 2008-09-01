@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -128,11 +128,12 @@ uses Catalyst::Helper to make a ::Controller::Auth
 
 sub mk_auth_controller {
     my $helper = Catalyst::Helper->new();
-    my $app_name = app_name();
-    my $controller_file = "lib/$app_name/Controller/Auth.pm";
+    my $app_path = app_name();
+    $app_path =~ s/::/\//g;
+    my $controller_file = "lib/$app_path/Controller/Auth.pm";
     $helper->render_file ('auth_controller',
                           $controller_file,
-                          {app_name => $app_name});
+                          {app_name => app_name()});
 }
 
 =head2 sub add_plugins()
