@@ -1,19 +1,23 @@
+---
 abstract: ~
-author: Kieren Diment <zarquon@cpan.org>
-build_requires: 
+author:
+  - 'Kieren Diment <zarquon@cpan.org>'
+build_requires:
   Catalyst::Runtime: 0
   Test::More: 0
-  Test::WWW::Mechanize::Catalyst: 0
   ok: 0
 distribution_type: module
-generated_by: Module::Install version 0.64
+generated_by: 'Module::Install version 0.77'
 license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
 name: Catalyst-Helper-AuthDBIC
-no_index: 
-  directory: 
+no_index:
+  directory:
     - inc
     - t
-requires: 
+requires:
   Catalyst::Plugin::Authentication: 0
   Catalyst::Plugin::Authentication::Store::DBIC: 0
   Catalyst::Plugin::Authorization::Roles: 0
@@ -24,4 +28,6 @@ requires:
   DBIx::Class::Schema::Loader: 0
   Digest::SHA1: 0
   PPI: 0
-version: 0.04
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.05

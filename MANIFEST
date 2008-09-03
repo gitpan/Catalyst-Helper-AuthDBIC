@@ -1,24 +1,25 @@
+.gitignore
 Changes
+inc/Module/AutoInstall.pm
 inc/Module/Install.pm
+inc/Module/Install/AutoInstall.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
 inc/Module/Install/Fetch.pm
+inc/Module/Install/Include.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
-inc/Module/Install/Scripts.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Catalyst/Helper/AuthDBIC.pm
 Makefile.PL
-MANIFEST			This list of files
+MANIFEST
 MANIFEST.SKIP
 META.yml
 README
 script/auth_bootstrap.pl
 t/00-load.t
 t/01-functions.t
-t/author/pod-coverage.t
-t/author/pod.t
 t/lib/db/auth.db,"",""
 t/lib/db/auth.db,,
 t/lib/Makefile.PL
@@ -29,3 +30,5 @@ t/lib/TestApp.pm
 t/lib/TestApp/Controller/Root.pm
 t/lib/TestApp/Model/.gitignore
 t/live-test.t
+t/pod-coverage.t
+t/pod.t

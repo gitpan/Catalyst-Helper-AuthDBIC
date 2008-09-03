@@ -1,17 +1,12 @@
 use inc::Module::Install;
 
-my $module = 'Catalyst::Helper::AuthDBIC';
+name     'Catalyst-Helper-AuthDBIC';
+all_from 'lib/Catalyst/Helper/AuthDBIC.pm';
+author   'Kieren Diment <zarquon@cpan.org>';
 
-my $dist   = $module;
-$dist =~ s/::/-/g;
-name($dist);
-
-my @path = split '::', $module;
-all_from('lib/'. (join '/',@path). '.pm');
+build_requires 'Test::More';
 
 build_requires 'Catalyst::Runtime';
-build_requires 'Test::WWW::Mechanize::Catalyst';
-build_requires 'Test::More';
 build_requires 'ok';
 requires 'DBIx::Class::DigestColumns';
 requires 'Digest::SHA1';
@@ -28,4 +23,8 @@ requires 'Catalyst::Plugin::Authentication::Store::DBIC';
 
 install_script glob('script/*.pl');
 
-WriteAll();
+
+auto_install;
+
+WriteAll;
+

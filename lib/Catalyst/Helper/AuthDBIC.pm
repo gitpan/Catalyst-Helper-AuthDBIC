@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -35,7 +35,7 @@ Run the auth_bootstrap.pl in your application's root dir.
 The helper also creates a scriptin the script dir.  To add a user
 (with an optional role) do:
 
- myapp_auth_admin.pl -user username -passwd password [-role role]
+ myapp_auth_admin.pl -user username -passwd password [-role role] [-email me@example.com]
 
 =head2 sub app_name()
 
@@ -103,9 +103,10 @@ sub make_model {
                  'Auth',
                  'DBIC::Schema',
                  app_name() . "::Auth::Schema",
-                 'dbi:SQLite:db/auth.db,"",""');
+            );
     system( @cmd );
-    my $user_schema = app_name() . '::Auth::Schema::User';
+    my $schema_name = app_name() . "::Auth::Schema";
+    my $user_schema = "$schema_name"."::User";
     my @path = split /::/, $user_schema;
     my $user_schema_path = join '/', @path;
     my $module = "lib/$user_schema_path.pm";
@@ -118,6 +119,22 @@ sub make_model {
     my $last_comment = $comments->[$#{$comments}];
     $last_comment->set_content($digest_code);
     $doc->save($module);
+
+    # we need to specify the dsn with __path_to(db/auth.db)__ in
+    # .conf, rather than code in the model.
+    my $conf_file = "$app_prefix.conf";
+
+    open my $FH, ">>", $conf_file;
+    my $conf = <<EOF;
+    <Model Auth>
+      schema_class $schema_name
+      connect_info dbi:SQLite:__path_to(db/auth.db)__
+      connect_info user
+      connect_info passwd # keep these here for dsns that need 'em
+    </Model>
+EOF
+    print $FH $conf;
+    close $FH;
 }
 
 =head2 sub mk_auth_controller()
@@ -185,12 +202,13 @@ sub add_config {
     my $found = PPI::Find->new(\&_find_setup);
     my ($setup) = $found->in($doc);
     croak "unable to find __PACKAGE__->setup in $module\n" if !$setup;
-    my $auth_doc = PPI::Document->new(\(Catalyst::Helper->get_file(__PACKAGE__, 'auth_conf')));
+    my $auth_doc_plain = Catalyst::Helper->get_file(__PACKAGE__, 'auth_conf');
+    $auth_doc_plain =~ s/__MYSCHEMA__/Auth/msg;
+    my $auth_doc = PPI::Document->new(\$auth_doc_plain);
     my $auth_conf = $auth_doc->find_first('PPI::Statement');
-    # can't get this working, so we'll cope with cosmetic uglyness
-    #     my $space =  PPI::Document->new(\"\n")->find_first('PPI::Token::Whitespace');
-    #    $setup->insert_before($space);
-    #    my $sib = $setup->previous_sibling;
+    # the code produced here is a little ugly and lacks a \n between
+    # the config and the __PACKAGE__->setup declaration. The usage of
+    # PPI to modify source is also inconsistent here to elewhere.
     $setup->insert_before($auth_conf);
     $doc->save($module);
 }
@@ -397,9 +415,9 @@ __auth_conf__
         'users' => {
             'store' => {
                 'role_column' => 'role_text',
-                'user_class' => 'AuthSchema::User',
+                'user_class' => '__MYSCHEMA__::User',
                 'class' => 'DBIx::Class',
-            }, 
+            },
            'credential' => {
                 'password_type' => 'hashed',
                 'password_field' => 'password',
