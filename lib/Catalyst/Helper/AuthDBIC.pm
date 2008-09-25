@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -91,9 +91,9 @@ sub make_model {
 
     map { $dbh->do($_) } @sql;
     my $app_prefix = Catalyst::Utils::appprefix(app_name());
-    
+
     make_schema_at(app_name() . "::Auth::Schema",
-                   {  components => ['DigestColumns'],
+                   {  components => ['EncodedColumn'],
                       dump_directory => 'lib' ,
                   },
                    ["dbi:SQLite:dbname=db/auth.db", "",""]);
@@ -198,11 +198,22 @@ Add the auth configuration in MyApp.pm
 =cut
 
 sub add_config {
+    my ($credential) = @_;
     my ($module, $doc) = _get_ppi();
     my $found = PPI::Find->new(\&_find_setup);
     my ($setup) = $found->in($doc);
     croak "unable to find __PACKAGE__->setup in $module\n" if !$setup;
-    my $auth_doc_plain = Catalyst::Helper->get_file(__PACKAGE__, 'auth_conf');
+    my $auth_doc_plain;
+    
+    if ( $credential eq 'http' ) {
+        warn "Configuring http credential\n";
+        $auth_doc_plain = Catalyst::Helper->get_file(__PACKAGE__, 'auth_conf_http');
+    }
+    elsif ( $credential eq 'password' ) {
+        warn "Configuring password (web based) authentication credential\n";
+        $auth_doc_plain = Catalyst::Helper->get_file(__PACKAGE__, 'auth_conf_passwd');
+    }
+    
     $auth_doc_plain =~ s/__MYSCHEMA__/Auth/msg;
     my $auth_doc = PPI::Document->new(\$auth_doc_plain);
     my $auth_conf = $auth_doc->find_first('PPI::Statement');
@@ -385,6 +396,8 @@ sub unauthorized : Private {
 
 1;
 
+=pod
+
 =head1 NAME
 
 [% app_name %]Controller::Auth
@@ -407,8 +420,31 @@ MyApp::Controller::Root:
       return 1;
  }
 
+=cut
 
-__auth_conf__
+__auth_conf_http__
+ __PACKAGE__->config( authentication => {
+    'default_realm' => 'users',
+    'realms' => {
+        'users' => {
+            'store' => {
+                'role_column' => 'role_text',
+                'user_class' => '__MYSCHEMA__::User',
+                'class' => 'DBIx::Class',
+            },
+            'credential' => {
+                 'password_type' => 'hashed',
+                 'password_field' => 'password',
+                 'password_hash_type' => 'SHA-1',
+                 'class' => 'HTTP',
+                 'type' => 'basic',
+             }
+        }
+    },
+});
+
+
+__auth_conf_password__
  __PACKAGE__->config( authentication => {
     'default_realm' => 'users',
     'realms' => {
@@ -429,12 +465,15 @@ __auth_conf__
 });
 
 __digest__
- __PACKAGE__->digestcolumns(
-             columns   => [qw/ password /],
-             algorithm => 'SHA-1',
-             encoding  => 'base64',
-             auto      => 1,
-);
+
+      __PACKAGE__->add_columns(
+        'password' => {
+          data_type     => 'CHAR',
+          size          => 40,
+          encode_column => 1,
+          encode_class  => 'Digest',
+          encode_args   => {algorithm => 'SHA-1', format => 'hex'},
+      });
 
 __requires__
 requires 'Catalyst::Plugin::Authentication';
@@ -442,8 +481,9 @@ requires 'Catalyst::Plugin::Authorization::Roles';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Session::Store::FastMmap';
-requires 'Catalyst::Plugin::Authentication::Store::DBIC';
-requires 'Digest::SHA1';
+requires 'Catalyst::Authentication::Store::DBIx::Class';
+requires 'Catalyst::Authentication::Credential::HTTP';
+requires 'DBIx::Class::EncodedColumn;
 __login.tt__
 <h1> Please login</h1>
 [% IF c.stash.message != '' %] <h2 style='color:red'> [% c.stash.message %] </h2

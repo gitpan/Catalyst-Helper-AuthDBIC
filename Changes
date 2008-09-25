@@ -1,3 +1,6 @@
+0.06 September 24 2008
+     - Moved from DBIx::Class::DigestColumns to DBIx::Class::EncodedColumn
+     - Added option for password or http credentials.
 0.05 Tue Sep 2 2008
      - Bug fix for Multi::Level::App::Names
      - Addition of model config to .conf file
