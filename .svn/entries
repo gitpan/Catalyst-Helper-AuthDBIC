@@ -1,0 +1,97 @@
+8
+
+dir
+10345
+http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Helper-AuthDBIC/tags/0.08
+http://dev.catalyst.perl.org/repos/Catalyst
+
+
+
+2009-05-28T14:01:10.528551Z
+10345
+zarquon
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4ad37cd2-5fec-0310-835f-b3785c72a374
+
+t
+dir
+
+script
+dir
+
+.gitignore
+file
+
+
+
+
+2009-05-28T14:00:49.000000Z
+c36e80e8a845a6e5992baac1afccce9b
+2009-05-28T14:01:10.528551Z
+10345
+zarquon
+
+lib
+dir
+
+Makefile.PL
+file
+
+
+
+
+2009-05-28T14:00:49.000000Z
+0d69b710af9c8f92c033ee938938aea3
+2009-05-28T14:01:10.528551Z
+10345
+zarquon
+
+Changes
+file
+
+
+
+
+2009-05-28T14:00:49.000000Z
+2a666d6867ae2b9a3b40fcbd678aeb25
+2009-05-28T14:01:10.528551Z
+10345
+zarquon
+
+MANIFEST.SKIP
+file
+
+
+
+
+2009-05-28T14:00:49.000000Z
+de784cd76ffd197b2c3df793f97cfa1e
+2009-05-28T14:01:10.528551Z
+10345
+zarquon
+
+README
+file
+
+
+
+
+2009-05-28T14:00:49.000000Z
+cea630426d811f6bba7a2a3026e4ec0f
+2009-05-28T14:01:10.528551Z
+10345
+zarquon
+
