@@ -1,3 +1,5 @@
+0.08 Jun 18 2009
+     - Fix RT # 47075 (thanks KMX)
 0.08 May 28 2009
      - Fix issue with Directory::Scratch in t/02-usage.t (thanks G.Wade Johnson)
 0.07 September 25 2008

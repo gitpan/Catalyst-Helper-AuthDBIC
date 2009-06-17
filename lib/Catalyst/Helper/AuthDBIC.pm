@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -32,7 +32,7 @@ recommended to back up your application before using this module.
 
 Run the auth_bootstrap.pl in your application's root dir.
 
-The helper also creates a scriptin the script dir.  To add a user
+The helper also creates a script in the script dir.  To add a user
 (with an optional role) do:
 
  myapp_auth_admin.pl -user username -passwd password [-role role] [-email me@example.com]
