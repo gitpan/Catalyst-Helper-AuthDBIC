@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -483,7 +483,7 @@ requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Session::Store::FastMmap';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Authentication::Credential::HTTP';
-requires 'DBIx::Class::EncodedColumn;
+requires 'DBIx::Class::EncodedColumn';
 __login.tt__
 <h1> Please login</h1>
 [% IF c.stash.message != '' %] <h2 style='color:red'> [% c.stash.message %] </h2
