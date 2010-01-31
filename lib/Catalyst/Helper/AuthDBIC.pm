@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -161,7 +161,7 @@ sub mk_auth_controller {
 
 sub add_plugins {
     my ($module, $doc) = _get_ppi();
-    
+
     my $find = PPI::Find->new( \&_find_use_catalyst);
     my ($found) = $find->in($doc);
     my $find_plugins = PPI::Find->new(\&_find_plugins);
@@ -204,7 +204,7 @@ sub add_config {
     my ($setup) = $found->in($doc);
     croak "unable to find __PACKAGE__->setup in $module\n" if !$setup;
     my $auth_doc_plain;
-    
+
     if ( $credential eq 'http' ) {
         warn "Configuring http credential\n";
         $auth_doc_plain = Catalyst::Helper->get_file(__PACKAGE__, 'auth_conf_http');
@@ -213,7 +213,7 @@ sub add_config {
         warn "Configuring password (web based) authentication credential\n";
         $auth_doc_plain = Catalyst::Helper->get_file(__PACKAGE__, 'auth_conf_passwd');
     }
-    
+
     $auth_doc_plain =~ s/__MYSCHEMA__/Auth/msg;
     my $auth_doc = PPI::Document->new(\$auth_doc_plain);
     my $auth_conf = $auth_doc->find_first('PPI::Statement');

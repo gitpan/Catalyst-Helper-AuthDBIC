@@ -33,7 +33,8 @@ requires:
   DBIx::Class::EncodedColumn: 0
   DBIx::Class::Schema::Loader: 0
   PPI: 0
+  parent: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Helper-AuthDBIC/trunk/
-version: 0.10
+version: 0.11

@@ -2,7 +2,14 @@
 
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More;
+
+BEGIN {
+    eval { require Test::WWW::Mechanize::Catalyst }
+    or plan skip_all => 'Need Test::WWW::Mechanize::Catalyst to run this test';
+}
+
+plan tests => 3;
 
 # setup library path
 use FindBin qw($Bin);
