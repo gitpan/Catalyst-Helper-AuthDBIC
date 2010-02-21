@@ -11,7 +11,8 @@ build_requires 'ok';
 requires 'parent';
 requires 'DBIx::Class::EncodedColumn';
 requires 'PPI';
-requires 'DBIx::Class::Schema::Loader';
+requires 'Catalyst::Model::DBIC::Schema' => '0.40';
+requires 'DBIx::Class::Schema::Loader'   => '0.05003';
 build_requires 'Directory::Scratch';
 build_requires 'Test::Command';
 

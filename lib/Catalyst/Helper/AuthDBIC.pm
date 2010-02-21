@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -106,7 +106,7 @@ sub make_model {
             );
     system( @cmd );
     my $schema_name = app_name() . "::Auth::Schema";
-    my $user_schema = "$schema_name"."::User";
+    my $user_schema = "$schema_name"."::Result::User";
     my @path = split /::/, $user_schema;
     my $user_schema_path = join '/', @path;
     my $module = "lib/$user_schema_path.pm";

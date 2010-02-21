@@ -1,0 +1,17 @@
+***************
+*** 105,111 ****
+                   app_name() . "::Auth::Schema",
+              );
+      system( @cmd );
+!     my $schema_name = app_name() . "::Auth::Schema";
+      my $user_schema = "$schema_name"."::User";
+      my @path = split /::/, $user_schema;
+      my $user_schema_path = join '/', @path;
+--- 105,111 ----
+                   app_name() . "::Auth::Schema",
+              );
+      system( @cmd );
+!     my $schema_name = app_name() . "::Auth::Schema::Result";
+      my $user_schema = "$schema_name"."::User";
+      my @path = split /::/, $user_schema;
+      my $user_schema_path = join '/', @path;

@@ -1,3 +1,7 @@
+0.12 Feb 20 2010
+     - applied patch from RT #47226 thanks to kmx
+     - apply patch from RT #54533 thanks to alfston pinto
+     - update for DBIx::Class::Schema::Loader 0.05
 0.11 Jan 31 2010
      - Add parent.pm to dependencies.
      - Make TWMC optional and do not run mech tests if it's not installed.
