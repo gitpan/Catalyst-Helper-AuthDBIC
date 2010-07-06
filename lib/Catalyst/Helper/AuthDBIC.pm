@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -97,8 +97,10 @@ sub make_model {
                       dump_directory => 'lib' ,
                   },
                    ["dbi:SQLite:dbname=db/auth.db", "",""]);
-
-    my @cmd = ( "./script/$app_prefix" . "_create.pl" ,
+    my $create_file = File::Spec->catfile(File::Spec->curdir(),
+                                          'script',
+                                          "${app_prefix}_create.pl");
+    my @cmd = ( "$create_file",
                  'model',
                  'Auth',
                  'DBIC::Schema',

@@ -1,3 +1,5 @@
+0.13 Jun 6 2010
+     - Fixed hard coded / for dir path to make things work in Windows (thanks Curtiss Jewel and rfulbrig RT #57648)
 0.12 Feb 20 2010
      - applied patch from RT #47226 thanks to kmx
      - apply patch from RT #54533 thanks to alfston pinto
