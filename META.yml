@@ -25,6 +25,7 @@ no_index:
 requires:
   Catalyst::Authentication::Credential::HTTP: 0
   Catalyst::Authentication::Store::DBIx::Class: 0
+  Catalyst::Devel: 0
   Catalyst::Model::DBIC::Schema: 0.40
   Catalyst::Plugin::Authentication: 0
   Catalyst::Plugin::Authorization::Roles: 0
@@ -38,4 +39,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Helper-AuthDBIC/trunk/
-version: 0.13
+version: 0.14

@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;

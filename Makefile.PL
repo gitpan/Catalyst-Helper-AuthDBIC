@@ -9,6 +9,7 @@ build_requires 'Test::More';
 build_requires 'Catalyst::Runtime';
 build_requires 'ok';
 requires 'parent';
+requires 'Catalyst::Devel';
 requires 'DBIx::Class::EncodedColumn';
 requires 'PPI';
 requires 'Catalyst::Model::DBIC::Schema' => '0.40';
