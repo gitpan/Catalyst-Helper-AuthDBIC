@@ -1,3 +1,5 @@
+0.15 Jan 14 2010
+     - Fixed DBIC schemaas as per RT #64764 (thanks mstrout).
 0.14 Jul 9 2010
      - Added missing dependency to fix cpantesters failure
 0.13 Jul 6 2010
