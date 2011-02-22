@@ -1,5 +1,6 @@
-0.15 Jan 14 2010
-     - Fixed DBIC schemaas as per RT #64764 (thanks mstrout).
+0.16 12 Feb 2010
+     - Fix relationships/ keys in database so that we don't just blindly use auto-increment primary keys.
+0.15 15th Jan 2010
 0.14 Jul 9 2010
      - Added missing dependency to fix cpantesters failure
 0.13 Jul 6 2010

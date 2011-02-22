@@ -2,7 +2,7 @@ package Catalyst::Helper::AuthDBIC;
 use strict;
 use warnings;
 use Catalyst::Helper;
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 use Carp;
 use DBI;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
@@ -73,20 +73,20 @@ sub make_model {
     $helper->mk_dir('db');
     my $dbh = DBI->connect("dbi:SQLite:dbname=db/auth.db","","");
     my @sql = ("CREATE TABLE role (
-                role TEXT primary key,
-                );",
+                id   INTEGER PRIMARY KEY,
+                role TEXT UNIQUE );",
                "CREATE TABLE user (
-                username TEXT primary key,
+                id       INTEGER PRIMARY KEY,
+                username TEXT UNIQUE,
                 email    TEXT,
                 password TEXT,
                 status   TEXT,
                 role_text TEXT,
                 session_data TEXT );",
                "CREATE TABLE user_role (
+                id   INTEGER PRIMARY KEY,
                 user INTEGER REFERENCES user(id),
-                role INTEGER REFERENCES role(id),
-                primary key(user,role)
-                );"
+                roleid INTEGER REFERENCES role(id) );"
            );
 
     map { $dbh->do($_) } @sql;

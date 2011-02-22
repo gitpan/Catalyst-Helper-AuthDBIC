@@ -39,4 +39,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Helper-AuthDBIC/trunk/
-version: 0.15
+version: 0.16
