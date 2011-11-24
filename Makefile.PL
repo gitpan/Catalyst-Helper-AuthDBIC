@@ -26,6 +26,8 @@ requires 'Catalyst::Plugin::Session::Store::FastMmap';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Authentication::Credential::HTTP';
 
+test_requires 'Test::More' => '0.88';
+
 install_script glob('script/*.pl');
 
 

@@ -1,3 +1,5 @@
+0.17 24 Nov 2011
+     - Fix tests if Test::WWW::Mechanize::Catalyst isn't installed.
 0.16 12 Feb 2010
      - Fix relationships/ keys in database so that we don't just blindly use auto-increment primary keys.
 0.15 15th Jan 2010

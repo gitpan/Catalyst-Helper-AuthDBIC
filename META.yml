@@ -2,17 +2,18 @@
 abstract: ~
 author:
   - 'Kieren Diment <zarquon@cpan.org>'
+  - 'Kieren Diment <zarquon@cpan.org>'
 build_requires:
   Catalyst::Runtime: 0
   Directory::Scratch: 0
   ExtUtils::MakeMaker: 6.42
   Test::Command: 0
-  Test::More: 0
+  Test::More: 0.88
   ok: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.91'
+generated_by: 'Module::Install version 1.02'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -39,4 +40,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Helper-AuthDBIC/trunk/
-version: 0.16
+version: 0.17
